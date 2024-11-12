@@ -15,6 +15,12 @@ def lambda_handler(event, context):
         logger.info(prompt)
         file_name = event.get("file_name", None)  # 원본 이미지 파일 경로
         logger.info(file_name)
+        if '.' not in file_name:
+            logger.error(f"Invalid file name format: {file_name}")
+            return {
+                "statusCode": 400,
+                "body": json.dumps("Invalid file name format. Please include an extension (e.g., .jpg, .png).")
+            }
         masked_name = file_name.split(".")
         masked_image_name = f"{masked_name[0]}_masked.{masked_name[1]}"
         # masked_image_name = body.get("masked_image_name", None)  # 마스킹 이미지 파일 경로
