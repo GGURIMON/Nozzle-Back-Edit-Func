@@ -39,7 +39,13 @@ def inpainting(original_image_base64, mask_image_base64, prompt):
                 "image": base64.b64encode(original_image_base64).decode('utf-8'),
                 "text": translated_prompt,
                 "maskImage": base64.b64encode(mask_image_base64).decode('utf-8')
-            }
+            },
+            "imageGenerationConfig": {
+                    "numberOfImages": 1,
+                    "height": 1024,
+                    "width": 1024,
+                    "cfgScale": 8.0
+                }
         })
         logger.info("Inpainting request sent.")
         response = client.invoke_model(modelId=model_id, body=request)
@@ -61,10 +67,10 @@ def image_conditioning(original_image_base64, prompt):
                 "controlStrength": 0.7
             },
             "imageGenerationConfig": {
-                "numberOfImages": 1,
-                "height": 1024,
-                "width": 1024,
-                "cfgScale": 8.0
+                    "numberOfImages": 1,
+                    "height": 1024,
+                    "width": 1024,
+                    "cfgScale": 8.0
                 }
             })
         logger.info("Conditioning request sent.")
@@ -87,11 +93,11 @@ def outpainting(original_image_base64, mask_image_base64, prompt):
                         "outPaintingMode": "DEFAULT"
                     },
                     "imageGenerationConfig": {
-                        "numberOfImages": 1,
-                        "height": 512,
-                        "width": 512,
-                        "cfgScale": 8.0
-                    }
+                    "numberOfImages": 1,
+                    "height": 1024,
+                    "width": 1024,
+                    "cfgScale": 8.0
+                }
                 })
         logger.info("OutPainting request sent.")
         response = client.invoke_model(modelId=model_id, body=request)
