@@ -77,10 +77,7 @@ def lambda_handler(event, context):
 
             # 인페인팅 기능 실행
             response = image_edit(original_image_base64, mask_image_base64, prompt)
-            logger.info(type(response))
             logger.info(response)
-            result = base64.b64encode(response)
-            logger.info(result)
         return {
             "statusCode": 200,
             "body": json.dumps(response),
