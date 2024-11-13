@@ -19,7 +19,7 @@ def background_removal(original_image_base64):
         request = json.dumps({
             "taskType": "BACKGROUND_REMOVAL",
             "backgroundRemovalParams": {
-                "image": base64.b64encode(original_image_base64).decode('utf-8')
+                "image": original_image_base64
             }
         })
         logger.info("Background removal request sent.")
@@ -36,9 +36,9 @@ def inpainting(original_image_base64, mask_image_base64, prompt):
         request = json.dumps({
             "taskType": "INPAINTING",
             "inPaintingParams": {
-                "image": base64.b64encode(original_image_base64).decode('utf-8'),
+                "image": original_image_base64,
                 "text": translated_prompt,
-                "maskImage": base64.b64encode(mask_image_base64).decode('utf-8')
+                "maskImage": mask_image_base64
             },
             "imageGenerationConfig": {
                     "numberOfImages": 1,
@@ -51,6 +51,7 @@ def inpainting(original_image_base64, mask_image_base64, prompt):
         response = client.invoke_model(modelId=model_id, body=request)
         model_response = json.loads(response["body"].read())
         return model_response["images"][0]
+
     except Exception as e:
         logger.error(f"Error in inpainting: {str(e)}")
         return {"error": str(e)}
@@ -62,7 +63,7 @@ def image_conditioning(original_image_base64, prompt):
             "taskType": "TEXT_IMAGE",
             "textToImageParams": {
                 "text": translate_prompt,
-                "conditionImage": base64.b64encode(original_image_base64).decode('utf-8'),
+                "conditionImage": original_image_base64,
                 "controlMode": "CANNY_EDGE",
                 "controlStrength": 0.7
             },
@@ -77,6 +78,7 @@ def image_conditioning(original_image_base64, prompt):
         response = client.invoke_model(modelId=model_id, body=request)
         model_response = json.loads(response["body"].read())
         return model_response["images"][0]
+        
     except Exception as e:
         logger.error(f"Error in Conditioning: {str(e)}")
         return {"error": str(e)}
@@ -87,9 +89,9 @@ def outpainting(original_image_base64, mask_image_base64, prompt):
         request = json.dumps({
                     "taskType": "OUTPAINTING",
                     "outPaintingParams": {
-                        "image": base64.b64encode(original_image_base64).decode('utf-8'),
+                        "image": original_image_base64,
                         "text": translate_prompt,
-                        "maskImage": base64.b64encode(mask_image_base64).decode('utf-8'),
+                        "maskImage": mask_image_base64,
                         "outPaintingMode": "DEFAULT"
                     },
                     "imageGenerationConfig": {
