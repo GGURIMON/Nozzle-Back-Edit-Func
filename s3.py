@@ -23,3 +23,10 @@ def download_file(filePath: str):
         return encoded_string
     except (botocore.exceptions.ClientError, IOError) as error:
         print(f"Error downloading file: {error}")
+
+def upload_base64_to_s3(encoded_image: str, output_name: str):
+    # Base64 문자열을 디코딩하여 바이너리 데이터로 변환
+    image_data = base64.b64decode(encoded_image)
+
+    # S3에 업로드
+    s3.put_object(Bucket=bucket_name, Key=output_name, Body=image_data)
