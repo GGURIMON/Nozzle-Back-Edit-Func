@@ -5,7 +5,7 @@ import urllib
 import base64
 import botocore
 
-bucket_name = "image-save-presigned-url-student03-v1"
+bucket_name = "temp_name"
 
 s3 = boto3.client(
     's3',
